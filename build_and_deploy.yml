@@ -1,0 +1,36 @@
+name: Docker Build and Deploy
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs every day at midnight
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Login to ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Build Docker image
+        run: docker build -t ClamAV_Antivirus_Scanner:latest .
+
+      - name: Tag Docker image
+        run: docker tag ClamAV_Antivirus_Scanner:latest ${{ steps.login-ecr.outputs.registry }}/ClamAV_Antivirus_Scanner_Repository:latest
+
+      - name: Push Docker image
+        run: docker push ${{ steps.login-ecr.outputs.registry }}/ClamAV_Antivirus_Scanner_Repository:latest
+
+        uses: aws-actions/aws-cli@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          args: lambda update-function-code --function-name <lambda-function-name> --image-uri ${steps.login-ecr.outputs.registry}/ClamAV_Antivirus_Scanner_Repository:latest
+
