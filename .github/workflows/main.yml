@@ -1,9 +1,9 @@
 name: Docker Build and Deploy
 
 on:
-  workflow_dispatch:
+  #workflow_dispatch: Runs on demand
   schedule:
-     - cron: '0 0 * * *' # Runs every day at midnight
+     - cron: '0 0 * * *' Runs every day at midnight
   
 
 jobs:
