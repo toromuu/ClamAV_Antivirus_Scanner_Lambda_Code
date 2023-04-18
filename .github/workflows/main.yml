@@ -1,8 +1,10 @@
 name: Docker Build and Deploy
 
 on:
-  schedule:
-    - cron: '38 16 * * *' # Runs every day at midnight
+  workflow_dispatch:
+  # schedule:
+  #   - cron: '38 16 * * *' # Runs every day at midnight
+  
 
 jobs:
   build_and_deploy:
@@ -38,5 +40,5 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          args: lambda update-function-code --function-name clamav_antivirus_scanner_lambda --image-uri ${steps.login-ecr.outputs.registry}/clamav_antivirus_scanner_repository:latest
+          args: lambda update-function-code --function-name clamav_antivirus_scanner_lambda --image-uri ${steps.login-ecr.outputs.registry}/clamav_antivirus_scanner_repository:latestt
 
