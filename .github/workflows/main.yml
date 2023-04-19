@@ -4,7 +4,7 @@ on:
   #workflow_dispatch: Runs on demand
   #Runs every day at midnight
   schedule:
-     - cron: '0 1 * * *' 
+     - cron: '0 0 * * *' 
   
 
 jobs:
