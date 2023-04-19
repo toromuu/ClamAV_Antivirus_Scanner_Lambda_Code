@@ -1,10 +1,16 @@
-# S3 Quarantine Bucket Architecture
+# ClamAV_Antivirus_Scanner_Lambda_Code
 
-This architecture provides a way to scan files uploaded by users to an S3 bucket of quarantine, and move clean files to a production bucket. The architecture uses a Lambda function written in Node.js and the clamav engine to scan files for viruses.
+This repository contains: 
+
+- The javascript code to scan an object in an s3 bucket using the ClamAV antivirus engine, and determine if the object is infected or not. If infected, an email is sent to an sns topic, and if safe, it is moved to a production bucket.
+
+- The definition of a github actions workflow to scheduledly create an image and upload a docker image to an ECR repository.
+
 
 ![Architecture Diagram](./readme/S3-malware-scanner-diagram.png)
 
-## Architecture Overview
+## Solution Flow
+
 
 1. A user uploads a file to the S3 bucket of quarantine.
 2. S3 triggers a notification, which in turn triggers a Lambda function.
@@ -27,6 +33,21 @@ To install and use this architecture, you will need to:
 3. Create an IAM role for the Lambda function with permissions to access the S3 buckets and the SNS topic.
 4. Deploy the Lambda function using the image built and pushed to the ECR private repository.
 5. Configure the S3 bucket of quarantine to trigger the Lambda function when a file is uploaded.
+
+For deploy this resources you can use IaC approach https://github.com/toromuu/ClamAV_Antivirus_Scanner_Terragrunt-Infrastructure-Live
+
+
+## Configure github actions 
+
+The workflow need the AWS Credentials to perform the push to ECR and update the lambda. So you have to set it manually:
+
+1. Open your GitHub repository and go to the "Settings" tab.
+2. Click on "Secrets" in the left sidebar.
+3. Click on "New Repository Secret" to create a new secret.
+4. Name your secret as "AWS_ACCESS_KEY_ID" and paste your AWS access key ID in the "Value" field.
+5. Click on "Add Secret" to save the secret.
+6. Repeat steps 3-5 to create another secret named "AWS_SECRET_ACCESS_KEY" and paste your AWS secret access key in the "Value" field.
+
 
 ## License
 
