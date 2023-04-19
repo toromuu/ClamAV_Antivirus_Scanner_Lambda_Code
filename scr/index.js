@@ -5,6 +5,9 @@ const path = require("path");  // Import path module for file path operations
 
 const region = process.env.AWS_REGION;  // Get AWS region from environment variable
 const production_bucket = process.env.S3_PRODUCTION_BUCKET;  // Get production or destionation S3 bucket from environment variable
+const sns_topic_arn = process.env.SNS_ARN_TOPIC;
+
+const sns = new AWS.SNS();
 
 const s3 = new AWS.S3({  // Initialize S3 client
   region: region,
@@ -60,6 +63,29 @@ module.exports.handler = async (s3Event) => {
             })
             .promise();
           console.log(`Virus found, ${objectKey}`);
+
+          const message = `ALERT! VIRUS FOUND AT OBJECT:${objectKey} VIRUS:  ${viruses.toString()} TIME: ${timestamp}`;
+
+          const params = {
+              Message: message,
+              Subject: 'AWS Notification',
+              TopicArn: sns_topic_arn
+          };
+
+          try {
+              const result = await sns.publish(params).promise();
+              console.log('SNS message sent:', result);
+              return {
+                  statusCode: 200,
+                  body: 'SNS message sent successfully'
+              };
+          } catch (error) {
+              console.error(error);
+              return {
+                  statusCode: 500,
+                  body: 'Error sending SNS message'
+              };
+          }
       } else {
           // If no malware is detected, tag the object with the scan result and timestamp
           console.log("CLEAN");    
