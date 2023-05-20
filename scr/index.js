@@ -74,7 +74,7 @@ module.exports.handler = async (s3Event) => {
           console.log(`Virus found, ${objectKey}`);
 
           // Send the email with the notification of virus found to the PDL of admins
-          const message = `ALERT! VIRUS FOUND AT OBJECT:${objectKey} VIRUS:  ${viruses.toString()} TIME: ${timestamp}`;
+          const message = `<!DOCTYPE html><html><body><h1>[Critical AWS]: Virus Found in S3 Bucket</h1><p>Hello Security Champions,<br><br>This email is to notify you that a virus has been found in the S3 bucket. Immediate action is required to investigate and mitigate the issue.</p><p>Details:<ul><li>Object: ${objectKey}</li><li>Virus name:${viruses.toString()}</li><li>Timestamp: ${timestamp}</li></ul></p><p>Please take appropriate measures to secure the S3 bucket and remove the virus promptly.</p><p>Best regards,<br>ClamAV Antivirus Scanner</p></body></html>`;
           const params = {
               Message: message,
               Subject: 'AWS Notification',
