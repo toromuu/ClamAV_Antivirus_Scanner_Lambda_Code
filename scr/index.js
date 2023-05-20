@@ -75,35 +75,23 @@ module.exports.handler = async (s3Event) => {
 
           // Send the email with the notification of virus found to the PDL of admins
           //const message = `<!DOCTYPE html><html><body><h1>[Critical AWS]: Virus Found in S3 Bucket</h1><p>Hello Security Champions,<br><br>This email is to notify you that a virus has been found in the S3 bucket. Immediate action is required to investigate and mitigate the issue.</p><p>Details:<ul><li>Object: ${objectKey}</li><li>Virus name:${viruses.toString()}</li><li>Timestamp: ${timestamp}</li></ul></p><p>Please take appropriate measures to secure the S3 bucket and remove the virus promptly.</p><p>Best regards,<br>ClamAV Antivirus Scanner</p></body></html>`;
-          const message = `Content-Type: text/html; charset=utf-8
+          const message = `[Critical AWS]: Virus Found in S3 Bucket
 
-          <!DOCTYPE html>
-          <html>
-          <body>
-              <h1>[Critical AWS]: Virus Found in S3 Bucket</h1>
-              <p>
-                  Hello Security Champions,
-                  <br><br>
-                  This email is to notify you that a virus has been found in the S3 bucket. Immediate action is required to investigate and mitigate the issue.
-              </p>
-              <p>
-                  Details:
-                  <ul>
-                      <li>Object: ${objectKey}</li>
-                      <li>Virus name: ${viruses.toString()}</li>
-                      <li>Timestamp: ${timestamp}</li>
-                  </ul>
-              </p>
-              <p>
-                  Please take appropriate measures to secure the S3 bucket and remove the virus promptly.
-              </p>
-              <p>
-                  Best regards,<br>
-                  ClamAV Antivirus Scanner
-              </p>
-          </body>
-          </html>`;
+          Hello Security Champions,
           
+          This email is to notify you that a virus has been found in the S3 bucket. Immediate action is required to investigate and mitigate the issue.
+          
+            Details:
+            
+            Object: ${objectKey}
+            Virus name:${viruses.toString()}
+            Timestamp: ${timestamp}
+            
+          Please take appropriate measures to secure the S3 bucket and remove the virus promptly.
+          
+          Best regards,
+          ClamAV Antivirus Scanner`;
+
           const params = {
               Message: message,
               Subject: 'AWS Notification',
