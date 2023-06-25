@@ -1,8 +1,9 @@
-# ClamAV_Antivirus_Scanner_Lambda_Code
+# Serverless_Malware_Scanner-Lambda-Runtime
+
 
 This repository contains: 
 
-- The javascript code to scan an object in an s3 bucket using the ClamAV antivirus engine, and determine if the object is infected or not. If infected, an email is sent to an sns topic, and if safe, it is moved to a production bucket.
+- The javascript handler code to scan an object in an s3 bucket using the ClamAV antivirus engine, and determine if the object is infected or not. If infected, an email is sent to an sns topic, and if safe, it is moved to a production bucket.
 
 - The definition of a github actions workflow to scheduledly create an image and upload a docker image to an ECR repository.
 
